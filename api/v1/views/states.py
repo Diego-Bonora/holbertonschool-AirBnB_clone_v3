@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+""" view for states """
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
@@ -9,6 +9,7 @@ from models.state import State
 @app_views.route('/states/', methods=["GET"])
 @app_views.route("/states/<state_id>", methods=["GET"])
 def list_states(state_id=None):
+    """ lists all the states or just one """
     if state_id:
         states = None
         all_states = storage.all(State)
@@ -27,6 +28,7 @@ def list_states(state_id=None):
 
 @app_views.route("/states/<state_id>", methods=["DELETE"])
 def delete_state(state_id):
+    """ deletes a specific state """
     if state_id:
         states = None
         all_states = storage.all(State)
@@ -42,6 +44,7 @@ def delete_state(state_id):
 
 @app_views.route("/states/", methods=["POST"])
 def create_state():
+    """ creates a new state """
     json_data = request.get_json()
     if not json_data:
         return jsonify({"error": "Not a JSON"}), 400
@@ -56,6 +59,7 @@ def create_state():
 
 @app_views.route("/states/<state_id>", methods=["PUT"])
 def update_state(state_id):
+    """ updates a state """
     json_data = request.get_json()
     if not json_data:
         return jsonify({"error": "Not a JSON"}), 400
