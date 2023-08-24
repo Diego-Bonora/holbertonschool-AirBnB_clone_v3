@@ -10,39 +10,29 @@ from models.state import State
 @app_views.route("states/<state_id>/cities", methods=["GET"])
 def list_cities_by_state(state_id):
     """ lists all the Citys or just one """
-    cities = []
-    all_cities = storage.all(City)
-    for value in all_cities.values():
-        if value.state_id == state_id:
-            cities.append(value.to_dict())
-    if not cities:
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
+    cities = []
+    for city in state.cities:
+        cities.append(city.to_dict())
     return jsonify(cities)
 
 
 @app_views.route("/cities/<city_id>", methods=["GET"])
 def list_city(city_id):
     """ lists all the states or just one """
-    city = None
-    all_cities = storage.all(City)
-    for value in all_cities.values():
-        if value.id == city_id:
-            city = value.to_dict()
+    city = storage.get(City, city_id)
     if not city:
         abort(404)
-    return jsonify(city)
+    return jsonify(city.to_dict())
 
 
 @app_views.route("/cities/<city_id>", methods=["DELETE"])
 def delete_city(city_id):
     """ deletes a specific City """
-    if city_id:
-        city = None
-        all_cities = storage.all(City)
-        for value in all_cities.values():
-            if value.id == city_id:
-                city = value
-    if not city or not city_id:
+    city = storage.get(City, city_id)
+    if not city:
         abort(404)
     storage.delete(city)
     storage.save()
