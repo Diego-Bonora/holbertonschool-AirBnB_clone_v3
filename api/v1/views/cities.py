@@ -43,14 +43,14 @@ def delete_city(city_id):
 def create_city(state_id):
     """ creates a new City """
     json_data = request.get_json()
+    state = storage.get(State, state_id)
+    if not state:
+        abort(404)
     if not json_data:
         return jsonify("Not a JSON"), 400
     elif "name" not in json_data:
         return jsonify("Missing name"), 400
     else:
-        state = storage.get(State, state_id)
-        if not state:
-            abort(404)
         new_City = City()
         new_City.name = json_data["name"]
         new_City.state_id = state.id
