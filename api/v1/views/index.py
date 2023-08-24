@@ -14,6 +14,7 @@ from models.review import Review
 def status():
     return {"status": "OK"}
 
+
 @app_views.route('/stats')
 def count():
     return {
