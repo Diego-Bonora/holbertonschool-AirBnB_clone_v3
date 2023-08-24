@@ -16,14 +16,14 @@ def list_states(state_id=None):
         for value in all_states.values():
             if value.id == state_id:
                 states = value.to_dict()
+        if not states:
+            abort(404)
     else:
         states = []
         all_states = storage.all(State)
         for value in all_states.values():
             states.append(value.to_dict())
-    if not states:
-        abort(404)
-    return states
+    return jsonify(states)
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
@@ -39,7 +39,7 @@ def delete_state(state_id):
         abort(404)
     storage.delete(states)
     storage.save()
-    return {}, 200
+    return jsonify({}), 200
 
 
 @app_views.route("/states/", methods=["POST"], strict_slashes=False)
