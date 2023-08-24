@@ -6,8 +6,8 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states/', methods=["GET"])
-@app_views.route("/states/<state_id>", methods=["GET"])
+@app_views.route('/states/', methods=["GET"], strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
 def list_states(state_id=None):
     """ lists all the states or just one """
     if state_id:
@@ -26,7 +26,7 @@ def list_states(state_id=None):
     return states
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"])
+@app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
 def delete_state(state_id):
     """ deletes a specific state """
     if state_id:
@@ -42,7 +42,7 @@ def delete_state(state_id):
     return {}, 200
 
 
-@app_views.route("/states/", methods=["POST"])
+@app_views.route("/states/", methods=["POST"], strict_slashes=False)
 def create_state():
     """ creates a new state """
     json_data = request.get_json()
@@ -57,7 +57,7 @@ def create_state():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"])
+@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
 def update_state(state_id):
     """ updates a state """
     json_data = request.get_json()
