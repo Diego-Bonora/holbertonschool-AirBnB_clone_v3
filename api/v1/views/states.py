@@ -47,14 +47,15 @@ def create_state():
     """ creates a new state """
     json_data = request.get_json()
     if not json_data:
-        return jsonify({"error": "Not a JSON"}), 400
-    elif "name" in json_data:
-        return jsonify({"error": "Missing name"}), 400
-    new_state = State()
-    new_state.name = json_data["name"]
-    storage.new(new_state)
-    storage.save()
-    return jsonify(new_state.to_dict()), 201
+        return jsonify("Not a JSON"), 400
+    elif "name" not in json_data:
+        return jsonify("Missing name"), 400
+    else:
+        new_state = State()
+        new_state.name = json_data["name"]
+        storage.new(new_state)
+        storage.save()
+        return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
