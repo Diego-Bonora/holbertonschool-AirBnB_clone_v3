@@ -14,6 +14,8 @@ def list_amenities(amenity_id=None):
         amenities = storage.get(Amenity, amenity_id)
         if not amenities:
             abort(404)
+        else:
+            amenities = amenities.to_dict()
     else:
         amenities = []
         all_amenities = storage.all(Amenity)
@@ -51,7 +53,7 @@ def create_amenity():
 
 @app_views.route("/amenities/<amenity_id>", methods=["PUT"])
 def update_amenity(amenity_id):
-    """ updates a amenity """
+    """ updates an amenity """
     json_data = request.get_json()
     if not json_data:
         return jsonify({"error": "Not a JSON"}), 400
