@@ -28,7 +28,7 @@ def list_states(state_id=None):
                  strict_slashes=False)
 def delete_state(state_id):
     """ deletes a specific state """
-    state = storage.get(State)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
     storage.delete(state)
@@ -59,7 +59,7 @@ def update_state(state_id):
     if not json_data:
         return jsonify({"error": "Not a JSON"}), 400
 
-    state = storage.get(State)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
 
