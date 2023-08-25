@@ -7,4 +7,3 @@ from api.v1.views.states import *  # nopep8
 from api.v1.views.cities import *  # nopep8
 from api.v1.views.amenities import *  # nopep8
 from api.v1.views.users import *  # nopep8
-from api.v1.views.places import *  # nopep8
