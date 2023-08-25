@@ -6,18 +6,16 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states/', methods=["GET"])
-@app_views.route("/states/<state_id>", methods=["GET"])
+@app_views.route('/states/', methods=["GET"], strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
 def list_states(state_id=None):
     """ lists all the states or just one """
     if state_id:
-        states = None
-        all_states = storage.all(State)
-        for value in all_states.values():
-            if value.id == state_id:
-                states = value.to_dict()
+        states = storage.get(State, state_id)
         if not states:
             abort(404)
+        else:
+            states = states.to_dict()
     else:
         states = []
         all_states = storage.all(State)
@@ -26,23 +24,19 @@ def list_states(state_id=None):
     return jsonify(states)
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"])
+@app_views.route("/states/<state_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_state(state_id):
     """ deletes a specific state """
-    if state_id:
-        states = None
-        all_states = storage.all(State)
-        for value in all_states.values():
-            if value.id == state_id:
-                states = value
-    if not states or not state_id:
+    state = storage.get(State)
+    if not state:
         abort(404)
-    storage.delete(states)
+    storage.delete(state)
     storage.save()
     return jsonify({}), 200
 
 
-@app_views.route("/states/", methods=["POST"])
+@app_views.route("/states/", methods=["POST"], strict_slashes=False)
 def create_state():
     """ creates a new state """
     json_data = request.get_json()
@@ -58,20 +52,15 @@ def create_state():
         return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"])
+@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
 def update_state(state_id):
     """ updates a state """
     json_data = request.get_json()
     if not json_data:
         return jsonify({"error": "Not a JSON"}), 400
 
-    if state_id:
-        state = None
-        all_states = storage.all(State)
-        for value in all_states.values():
-            if value.id == state_id:
-                state = value
-    if not state or not state_id:
+    state = storage.get(State)
+    if not state:
         abort(404)
 
     not_for_change = ["id", "created_at", "updated_at"]
