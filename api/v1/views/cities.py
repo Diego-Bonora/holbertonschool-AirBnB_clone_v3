@@ -75,4 +75,4 @@ def update_city(city_id):
         if key not in not_for_change:
             setattr(city, key, value)
     storage.save()
-    return jsonify(City.to_dict()), 200
+    return jsonify(city.to_dict()), 200
