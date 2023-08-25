@@ -39,7 +39,7 @@ def delete_city(city_id):
     return jsonify({}), 200
 
 
-@app_views.route("/states/<state_id>/cities", methods=["POST"])
+@app_views.route("/states/<state_id>/cities", methods=["POST"], strict_slashes=False)
 def create_city(state_id):
     """ creates a new City """
     json_data = request.get_json()
@@ -73,6 +73,6 @@ def update_city(city_id):
     not_for_change = ["id", "created_at", "updated_at", "state_id"]
     for key, value in json_data.items():
         if key not in not_for_change:
-            setattr(City, key, value)
+            setattr(city, key, value)
     storage.save()
     return jsonify(City.to_dict()), 200
